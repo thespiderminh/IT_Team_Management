@@ -1,71 +1,71 @@
-create database MAJORASSIGNMENT;
+create database bai_tap_lon;
 
-create table Nhan_Vien (
-	MaNV varchar(10) not null,
-    HoTen nchar(50) not null,
-    NgaySinh date not null,
-    QueQuan nvarchar(100) not null,
-    GioiTinh_Nam bit not null,
-    DanToc nvarchar(20) default "Kinh",
-    SoDienThoai varchar(10),
-    Email varchar(50),
-    MaViTri varchar(10) not null,
-    ThamNien year not null,
+create table nhan_vien (
+	ma_nv varchar(10) not null,
+    ho_ten nchar(50) not null,
+    ngay_sinh date not null,
+    que_quan nvarchar(100) not null,
+    gioi_tinh__Nam bit not null,
+    dan_toc nvarchar(20) default "Kinh",
+    so_dien_thoai varchar(10),
+    email varchar(50),
+    ma_vi_tri varchar(10) not null,
+    tham_nien year not null,
     
-    constraint PK_Ma primary key (MaNV)
+    constraint pk_nhan_vien primary key (ma_nv)
 );
 
-create table Vi_Tri (
-	MaViTri varchar(10) not null,
-    TenViTri nvarchar(50) not null,
+create table vi_tri (
+	ma_vi_tri varchar(10) not null,
+    ten_vi_tri nvarchar(50) not null,
     
-    constraint PK_MaVT primary key (MaViTri)
+    constraint pk_vi_tri primary key (ma_vi_tri)
 );
 
-alter table Nhan_Vien add constraint FK_MaVT foreign key (MaViTri) references Vi_Tri(MaViTri);
+alter table nhan_vien add constraint fk_ma_vi_tri foreign key (ma_vi_tri) references vi_tri(ma_vi_tri);
 
-create table Cong_Viec (
-	TenCongViec nvarchar(100) not null,
-    NhanVienDamNhiem varchar(10) not null,
-    TienDo varchar(10) not null,
-    KhoKhan nvarchar(100),
+create table cong_viec (
+	ten_cong_viec nvarchar(100) not null,
+    nhan_vien_dam_nhiem varchar(10) not null,
+    tien_do varchar(10) not null,
+    kho_khan nvarchar(100),
     
-    constraint PK_TenCV primary key (TenCongViec),
-    constraint FK_TenCV foreign key (NhanVienDamNhiem) references Nhan_Vien(MaNV)
+    constraint pk_cong_viec primary key (ten_cong_viec),
+    constraint fk_cong_viec foreign key (nhan_vien_dam_nhiem) references nhan_vien(ma_nv)
 );
 
-create table Loi (
-	TenLoi nvarchar(100) not null,
-    NguoiGuiLoi nvarchar(100) not null,
-    NhanVienDamNhiem varchar(10) not null,
-    DaHoanThanh bit not null default 0,
-    KhoKhan nvarchar(100),
+create table loi (
+	ten_loi nvarchar(100) not null,
+    nguoi_gui_loi nvarchar(100) not null,
+    nhan_vien_dam_nhiem varchar(10) not null,
+    da_hoan_thanh bit not null default 0,
+    kho_khan nvarchar(100),
     
-    constraint PK_Loi primary key (TenLoi),
-	constraint FK_Loi foreign key (NhanVienDamNhiem) references Nhan_Vien(MaNV)
+    constraint pk_loi primary key (ten_loi),
+    constraint fk_loi foreign key (nhan_vien_dam_nhiem) references nhan_vien(ma_nv)
 );
 
 create table Muc_Luong (
-	MaNV varchar(10) not null,
-    LuongGoc int not null,
-    LuongThuong int default 0,
-    TongLuong int not null,
+	ma_nv varchar(10) not null,
+    luong_goc int not null,
+    luong_thuong int default 0,
+    tong_luong int not null,
     
-    constraint PK_MucLuong primary key (MaNV),
-    constraint FK_MucLuong foreign key (MaNV) references Nhan_Vien(MaNV)
+    constraint pk_muc_luong primary key (ma_nv),
+    constraint fk_muc_luong foreign key (ma_nv) references nhan_vien(ma_nv)
 );
 
 create table Phat (
-	MaNV varchar(10) not null,
-    LiDoPhat nvarchar(100) not null,
-    MucPhat int default 0,
+	ma_nv varchar(10) not null,
+    li_do_phat nvarchar(100) not null,
+    muc_phat int default 0,
     
-    constraint FK_Phat foreign key (MaNV) references Nhan_Vien(MaNV)
+    constraint FK_Phat foreign key (ma_nv) references nhan_vien(ma_nv)
 );
 
-create table Danh_Gia_Nhan_Vien (
-	MaNV varchar(10) not null,
-    DanhGia nvarchar(100) not null,
+create table danh_gia_nhan_vien (
+	ma_nv varchar(10) not null,
+    danh_gia nvarchar(100) not null,
     
-    constraint FK_DanhGia foreign key (MaNV) references Nhan_Vien(MaNV)
+    constraint fk_danh_gia foreign key (ma_nv) references nhan_vien(ma_nv)
 );
