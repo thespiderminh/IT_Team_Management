@@ -1,73 +1,104 @@
-create database bai_tap_lon;
+create database major_assignment;
 
-use bai_tap_lon;
-create table nhan_vien (
-	ma_nv varchar(10) not null,
-    ho_ten nchar(50) not null,
-    ngay_sinh date not null,
-    que_quan nvarchar(100) not null,
-    gioi_tinh__nam bit not null,
-    dan_toc nvarchar(20) default "Kinh",
-    so_dien_thoai varchar(10),
-    email varchar(50),
-    ma_vi_tri varchar(10) not null,
-    tham_nien year not null,
+use major_assignment;
+
+create table staff_information (
+	staff_id varchar(10),
+    name nvarchar(100) not null,
+    date_of_birth date,
+    hometown nvarchar(100),
+    sex__male bit,
+    phone_number varchar(10),
+    position_id varchar(10) not null,
     
-    constraint pk_nhan_vien primary key (ma_nv)
+    constraint pk_staff_id primary key (staff_id)
 );
 
-create table vi_tri (
-	ma_vi_tri varchar(10) not null,
-    ten_vi_tri nvarchar(50) not null,
+create table positions (
+	position_id varchar(10) not null,
+    position_name nvarchar(100) not null,
     
-    constraint pk_vi_tri primary key (ma_vi_tri)
+    constraint pk_position primary key (position_id)
 );
 
-alter table nhan_vien add constraint fk_ma_vi_tri foreign key (ma_vi_tri) references vi_tri(ma_vi_tri);
-
-create table cong_viec (
-	ten_cong_viec nvarchar(100) not null,
-    nhan_vien_dam_nhiem varchar(10) not null,
-    tien_do varchar(10) not null,
-    kho_khan nvarchar(100),
+create table project (
+	project_name nvarchar(100) not null,
+    created_by nvarchar(100) not null,
+    created_on date not null,
+    deadline date,
+    observers_id varchar(10),
+    is_high_priority bit default 0,
+    progress varchar(10) not null,
     
-    constraint pk_cong_viec primary key (ten_cong_viec),
-    constraint fk_cong_viec foreign key (nhan_vien_dam_nhiem) references nhan_vien(ma_nv)
+    constraint pk_project primary key (project_name)
 );
 
-create table loi (
-	ten_loi nvarchar(100) not null,
-    nguoi_gui_loi nvarchar(100) not null,
-    nhan_vien_dam_nhiem varchar(10) not null,
-    da_hoan_thanh bit not null default 0,
-    kho_khan nvarchar(100),
+create table task (
+	task_name nvarchar(100) not null,
+    belong_to_project nvarchar(100) not null,
+    created_by nvarchar(100) not null,
+    created_on date not null,
+    deadline date,
+    responsible_person_id varchar(10) not null,
+    participants_id varchar(10),
+    observers_id varchar(10),
+    score int check(score < 10),
+    is_high_priority bit default 0,
+    is_done bit not null,
+    difficulty nvarchar(100) default null,
     
-    constraint pk_loi primary key (ten_loi),
-    constraint fk_loi foreign key (nhan_vien_dam_nhiem) references nhan_vien(ma_nv)
+    constraint pk_task primary key (task_name)
 );
 
-create table muc_luong (
-	ma_nv varchar(10) not null,
-    luong_goc int not null,
-    luong_thuong int default 0,
-    tong_luong int not null,
+create table bug_fixing (
+	bug_name nvarchar(100) not null,
+    created_by nvarchar(100) not null,
+    created_on date not null,
+    need_code bit default 0,
+    deadline date,
+    responsible_person_id varchar(10) not null,
+    participants_id varchar(10),
+    difficulty nvarchar(100) default null,
     
-    constraint pk_muc_luong primary key (ma_nv),
-    constraint fk_muc_luong foreign key (ma_nv) references nhan_vien(ma_nv)
+    constraint pk_bug primary key (bug_name)
 );
 
-create table phat (
-	ma_nv varchar(10) not null,
-    li_do_phat nvarchar(100) not null,
-    muc_phat int default 0,
-    
-    constraint fk_phat foreign key (ma_nv) references nhan_vien(ma_nv)
-);
+alter table staff_information 
+add constraint fk_staff_information 
+foreign key (position_id) 
+references positions(position_id);
 
-create table danh_gia_nhan_vien (
-	ma_nv varchar(10) not null,
-    danh_gia nvarchar(100) not null,
-    
-    constraint fk_danh_gia foreign key (ma_nv) references nhan_vien(ma_nv)
-);
+alter table project
+add constraint fk_project
+foreign key (observers_id)
+references staff_information(staff_id);
 
+alter table task
+add constraint fk_task
+foreign key (belong_to_project)
+references project(project_name);
+
+alter table task
+add constraint fk_task2
+foreign key (responsible_person_id)
+references staff_information(staff_id);
+
+alter table task
+add constraint fk_task3
+foreign key (participants_id)
+references staff_information(staff_id);
+
+alter table task
+add constraint fk_task4
+foreign key (observers_id)
+references staff_information(staff_id);
+
+alter table bug_fixing
+add constraint fk_bug
+foreign key (responsible_person_id)
+references staff_information(staff_id);
+
+alter table bug_fixing
+add constraint fk_bug1
+foreign key (participants_id)
+references staff_information(staff_id);
