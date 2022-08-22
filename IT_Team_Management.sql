@@ -1,11 +1,12 @@
 create database bai_tap_lon;
 
+use bai_tap_lon;
 create table nhan_vien (
 	ma_nv varchar(10) not null,
     ho_ten nchar(50) not null,
     ngay_sinh date not null,
     que_quan nvarchar(100) not null,
-    gioi_tinh__Nam bit not null,
+    gioi_tinh__nam bit not null,
     dan_toc nvarchar(20) default "Kinh",
     so_dien_thoai varchar(10),
     email varchar(50),
@@ -45,7 +46,7 @@ create table loi (
     constraint fk_loi foreign key (nhan_vien_dam_nhiem) references nhan_vien(ma_nv)
 );
 
-create table Muc_Luong (
+create table muc_luong (
 	ma_nv varchar(10) not null,
     luong_goc int not null,
     luong_thuong int default 0,
@@ -55,12 +56,12 @@ create table Muc_Luong (
     constraint fk_muc_luong foreign key (ma_nv) references nhan_vien(ma_nv)
 );
 
-create table Phat (
+create table phat (
 	ma_nv varchar(10) not null,
     li_do_phat nvarchar(100) not null,
     muc_phat int default 0,
     
-    constraint FK_Phat foreign key (ma_nv) references nhan_vien(ma_nv)
+    constraint fk_phat foreign key (ma_nv) references nhan_vien(ma_nv)
 );
 
 create table danh_gia_nhan_vien (
@@ -69,3 +70,4 @@ create table danh_gia_nhan_vien (
     
     constraint fk_danh_gia foreign key (ma_nv) references nhan_vien(ma_nv)
 );
+
